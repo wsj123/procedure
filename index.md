@@ -278,10 +278,9 @@ DELIMITER ;
 用call和你过程名以及一个括号，括号里面根据需要，加入参数，参数包括输入参数、输出参数、输入输出参数。具体的调用方法可以参看上面的例子。
 
 ### MySQL存储过程的查询
-
-查看某个数据库下面的存储过程:
+- 查看某个数据库下面的存储过程:
 ```
-1.  SELECT name from mysql.proc where db="数据库名"
+1. SELECT name from mysql.proc where db="数据库名"
 2.SELECT routine_name FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA = '数据库'
 3.show PROCEDURE STATUS where db="数据库"
 ```
