@@ -279,16 +279,13 @@ DELIMITER ;
 
 ### MySQL存储过程的查询
 
-- 查看某个数据库下面的存储过程:
+查看某个数据库下面的存储过程:
 ```
 1.  SELECT name from mysql.proc where db="数据库名"
-
 2.SELECT routine_name FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA = '数据库'
-
 3.show PROCEDURE STATUS where db="数据库"
 ```
 - 查看存储过程的详细
-
 show CREATE PROCEDURE 数据库.存储过程
 
 ### MySQL存储过程的删除
