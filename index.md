@@ -345,7 +345,7 @@ END;
 DELIMITER ;
 ```
 
-####case语句
+#### case语句
 ```
 DELIMITER //
 CREATE PROCEDURE proc6(in parameter int)
@@ -378,8 +378,8 @@ case
 end case
 ```
 
-###循环语句
-####while ···· end while：
+### 循环语句
+#### while ···· end while：
 ```
 DELIMITER //  
 CREATE PROCEDURE proc4 ()
@@ -404,7 +404,7 @@ while条件 do
 endwhile
 ```
 
-####repeat···· end repeat：
+#### repeat···· end repeat：
 
 它在执行操作后检查结果，而while则是执行前进行检查。
 ```
@@ -449,12 +449,12 @@ end;
 DELIMITER;
 执行结果：0,1,2,3,4
 ```
-###LABLES 标号：
+### LABLES 标号：
 
 标号可以用在begin repeat while 或者loop 语句前，语句标号只能在合法的语句前面使用。可以跳出循环，使运行指令达到复合语句的最后一步。
 
-###ITERATE迭代
-####ITERATE:
+### ITERATE迭代
+#### ITERATE:
 ```
 DELIMITER //
 CREATE PROCEDURE proc10 ()
@@ -477,6 +477,6 @@ END;
 DELIMITER ;
 ```
 ```
-参考[http://blog.csdn.net/a__yes/article/details/52795793]
+[link,http://blog.csdn.net/a__yes/article/details/52795793][a]
 ```
 
