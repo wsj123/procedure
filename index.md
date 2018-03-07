@@ -125,3 +125,208 @@ SELECT @p_out;
 
 结果: 2
 ```
+#### .INOUT参数例子
+
+创建:
+```
+DELIMITER //
+
+CREATE PROCEDURE demo_inout_parameter(INOUT p_inout int)
+BEGIN
+
+SELECT p_inout;
+
+SET p_inout = 2;
+
+SELECT p_inout;
+
+END;
+
+//
+
+DELIMITER ;
+
+set @p_inout=1;
+
+CALL demo_inout_parameter(@p_inout) ;
+
+结果: 1
+
+SELECT @p_inout;
+
+结果:2
+```
+
+### 局部变量
+
+#### 变量定义
+
+局部变量声明一定要放在存储过程体的开始 
+
+DECLAREvariable_name [,variable_name…] datatype [DEFAULT value]; 
+
+其中，datatype为MySQL的数据类型，如:int, float, date,varchar(length) 
+
+例如:
+```
+DECLARE l_int int unsigned default 4000000;
+
+DECLARE l_numeric number(8,2) DEFAULT 9.95;
+
+DECLARE l_date date DEFAULT '1999-12-31';
+
+DECLARE l_datetime datetime DEFAULT '1999-12-31 23:59:59';
+
+DECLARE l_varchar VARCHAR(255) DEFAULT 'hello,world'  
+```
+
+#### 变量赋值
+SET 变量名 = 表达式值 [,variable_name = expression …]
+
+#### 用户变量
+
+在MySQL客户端使用用户变量
+```
+1. SELECT 'Hello World' into @x;
+
+SELECT @x;
+
+结果: "Hello World"
+
+2.SET @y="Goodbye Cruel World";
+
+SELECT @y;
+
+结果:Goodbye Cruel World
+
+3.SET @z=1+2+3;
+
+SELECT @z;
+
+结果: 6
+```
+
+#### 在存储过程中使用用户变量
+```
+CREATE PROCEDURE GreetWorld1() SELECT CONCAT(@greeting, ' World');
+
+SET @greeting='Hello';
+
+CALL GreetWorld1();
+
+结果：Hello World 
+```
+
+#### 在存储过程间传递全局范围的用户变量
+```
+CREATE PROCEDURE p1() SET @last_procedure='p1';
+
+CREATE PROCEDURE p2() SELECT CONCAT('Last procedure was ', @last_procedure);
+
+CALL p1();
+
+CALL p2();
+
+结果：Last procedure was p1
+```
+*:
+①用户变量名一般以@开头 
+
+②滥用用户变量会导致程序难以理解及管理
+
+### 注释
+
+MySQL存储过程可使用两种风格的注释
+
+双模杠：– 
+
+该风格一般用于单行注释 
+
+c风格： 一般用于多行注释 
+```
+DELIMITER // 
+
+CREATE PROCEDURE proc3 -- name存储过程名
+
+(IN parameter1 INTEGER)
+
+BEGIN
+
+DECLARE variable1 CHAR(10);
+
+if parameter1=17 THEN
+
+SET variable1 = 'birds';
+
+ELSE
+
+SET variable1 = 'beasts';
+
+END IF;
+
+INSERT INTO table1 VALUES(variable1);
+
+END;
+
+//
+
+DELIMITER ;
+```
+
+### MySQL存储过程的调用
+
+用call和你过程名以及一个括号，括号里面根据需要，加入参数，参数包括输入参数、输出参数、输入输出参数。具体的调用方法可以参看上面的例子。
+
+### MySQL存储过程的查询
+
+- 查看某个数据库下面的存储过程:
+```
+1.  SELECT name from mysql.proc where db="数据库名"
+
+2.SELECT routine_name FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA = '数据库'
+
+3.show PROCEDURE STATUS where db="数据库"
+```
+- 查看存储过程的详细
+
+show CREATE PROCEDURE 数据库.存储过程
+
+### MySQL存储过程的删除
+DROP PROCEDURE 存储过程名称
+
+### MySQL存储过程的控制语句
+
+#### 变量作用域
+内部的变量在其作用域范围内享有更高的优先权，当执行到end。变量时，内部变量消失，此时已经在其作用域外，变量不再可见了，
+
+应为在存储过程外再也不能找到这个申明的变量，但是你可以通过out参数或者将其值指派 
+
+给会话变量来保存其值。
+```
+DELIMITER //
+
+CREATE PROCEDURE proc3()
+
+BEGIN
+
+DECLARE x1 VARCHAR(5) DEFAULT 'outer';
+
+BEGIN
+
+DECLARE x1 VARCHAR(5) DEFAULT 'inner';
+
+SELECT x1;
+
+END;
+
+SELECT x1;
+
+END;
+
+//
+
+DELIMITER ;
+```
+
+### 条件语句
+#### if-then -else语句
