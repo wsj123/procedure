@@ -326,3 +326,157 @@ DELIMITER ;
 
 ### 条件语句
 #### if-then -else语句
+```
+DELIMITER //
+CREATE PROCEDURE proc5(IN parameter int)
+BEGIN
+DECLARE  var int;
+SET var=parameter+1;
+if var=0 THEN
+INSERT INTO t VALUES(17);
+END IF;
+IF parameter=0 THEN
+update t SET s1=parameter+1;
+ELSE
+UPDATE t SET s1=parameter+2;
+END IF;
+END;
+//
+DELIMITER ;
+```
+
+####case语句
+```
+DELIMITER //
+CREATE PROCEDURE proc6(in parameter int)
+BEGIN
+DECLARE var int;
+set var=parameter+1;
+CASE var
+WHEN 0 THEN
+INSERT INTO t VALUES(17);
+WHEN 1 THEN
+INSERT INTO t VALUES(18);
+ELSE
+INSERT INTO t VALUES(19);
+END CASE;
+END;
+//
+DELIMITER ;
+
+执行结果:
+ CALL proc6(-1) --17
+
+语法:
+case
+        when var=0 then
+               insert into t values(30);
+        when var>0 then
+        when var<0 then
+        else
+
+end case
+```
+
+###循环语句
+####while ···· end while：
+```
+DELIMITER //  
+CREATE PROCEDURE proc4 ()
+BEGIN
+
+DECLARE var INT ;
+SET var = 0 ;
+WHILE var < 6 DO
+	INSERT INTO t
+VALUES
+	(var) ;
+SET var = var + 1 ;
+END
+WHILE ;
+END ;//  
+DELIMITER ; 
+执行结果: 0,1,2,3,4,5
+
+语法:
+while条件 do
+--循环体
+endwhile
+```
+
+####repeat···· end repeat：
+
+它在执行操作后检查结果，而while则是执行前进行检查。
+```
+DELIMITER //
+CREATE PROCEDURE proc8 ()
+BEGIN
+DECLARE v INT;
+set v=0;
+REPEAT
+INSERT INTO t VALUES(v);
+SET v=v+1;
+UNTIL v>=5
+END REPEAT;
+end;
+//
+DELIMITER ;
+执行结果:0,1,2,3,4
+语法: 
+repeat
+--循环体
+until循环条件     
+endrepeat;
+```
+loop ·····endloop:
+
+loop循环不需要初始条件，这点和while 循环相似，同时和repeat循环一样不需要结束条件, leave语句的意义是离开循环。
+```
+DELIMITER //
+CREATE PROCEDURE proc9 ()
+BEGIN
+DECLARE v int;
+SET v=0;
+LOOP_LABLE:LOOP
+INSERT INTO t VALUES(v);
+SET v=v+1;
+if v>=5 THEN
+LEAVE LOOP_LABLE;
+END IF;
+END LOOP;
+end;
+//
+DELIMITER;
+执行结果：0,1,2,3,4
+```
+###LABLES 标号：
+
+标号可以用在begin repeat while 或者loop 语句前，语句标号只能在合法的语句前面使用。可以跳出循环，使运行指令达到复合语句的最后一步。
+
+###ITERATE迭代
+####ITERATE:
+```
+DELIMITER //
+CREATE PROCEDURE proc10 ()
+BEGIN
+DECLARE v INT;
+set v=0;
+LOOP_LABLE:LOOP
+if v=3 THEN
+set v=v+1;
+ITERATE LOOP_LABLE;
+END IF;
+INSERT INTO t VALUES(v);
+SET v=v+1;
+if v>=5 THEN
+LEAVE LOOP_LABLE;
+END if;
+END LOOP;
+END;
+//
+DELIMITER ;
+```
+```
+参考[http://blog.csdn.net/a__yes/article/details/52795793]
+```
+
